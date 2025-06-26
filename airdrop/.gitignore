@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Wallet files
+*.json
+!package.json
+!package-lock.json
+!tsconfig.json
+
+# Environment variables
+.env
+
+# Build output
+dist/
+build/
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
