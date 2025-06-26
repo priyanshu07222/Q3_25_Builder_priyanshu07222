@@ -28,23 +28,23 @@ const [authorityPda] = PublicKey.findProgramAddressSync(
     program.programId
   );
 
-// (async () => {
-//     try {
-//         const txhash = await program.methods
-//         .initialize("priyanshu07222")
-//         .accounts({
-//             user: keypair.publicKey,
-//             account: account_key,
-//             system_program: SYSTEM_PROGRAM_ID,
-//         })
-//         .signers([keypair])
-//         .rpc();
-//         console.log(`Success! Check out your TX here: https://explorer.solana.com/tx/${txhash}?cluster=devnet`);
-//     } catch (error) {
-//         console.error(`Oops! Something went wrong: ${error}`);
+(async () => {
+    try {
+        const txhash = await program.methods
+        .initialize("priyanshu07222")
+        .accounts({
+            user: keypair.publicKey,
+            account: account_key,
+            system_program: SYSTEM_PROGRAM_ID,
+        })
+        .signers([keypair])
+        .rpc();
+        console.log(`Success! Check out your TX here: https://explorer.solana.com/tx/${txhash}?cluster=devnet`);
+    } catch (error) {
+        console.error(`Oops! Something went wrong: ${error}`);
         
-//     }
-// })();
+    }
+})();
 
 
 (async () => {
