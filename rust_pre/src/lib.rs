@@ -1,6 +1,3 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
-}
 
 #[cfg(test)] mod tests {
     // use solana_sdk::{signature::{Keypair, Signer}, pubkey::Pubkey};
@@ -62,8 +59,6 @@ pub fn add(left: u64, right: u64) -> u64 {
         }
     }
     
-    #[test]
-    fn airdrop() {}
     
     #[test]
     fn transfer_sol() {
