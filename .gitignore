@@ -2,3 +2,5 @@
 */yarn.lock
 **wallet.json
 *wallet.json
+./rust_pre/target
+rust_pre/target
