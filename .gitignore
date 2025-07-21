@@ -4,3 +4,4 @@
 *wallet.json
 ./rust_pre/target
 rust_pre/target
+amm/target
