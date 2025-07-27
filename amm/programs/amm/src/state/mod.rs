@@ -28,7 +28,7 @@ pub struct AmmAccount{
     
     /// Bump used to derive the PDA for this config account.
     /// Ensures the correct address is derived on-chain.
-    pub config_bump: u8,
+    pub amm_bump: u8,
     
     /// Bump used to derive the PDA for the LP token mint account.
     /// LP tokens represent a user’s share of the liquidity pool.

@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 pub mod error;
-pub mod constraint;
+pub mod constant;
 pub mod state;
 pub mod instructions;
 
