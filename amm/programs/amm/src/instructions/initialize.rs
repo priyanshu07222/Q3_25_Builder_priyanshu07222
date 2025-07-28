@@ -1,68 +1,77 @@
 use anchor_lang::prelude::*;
-use anchor_spl::{associated_token::AssociatedToken, token::{Mint, Token, TokenAccount}, };
+use anchor_spl::{
+    associated_token::AssociatedToken,
+    token::{Mint, Token, TokenAccount},
+};
 
-use crate::{state::AmmAccount, InitializeBumps};
+use crate::state::Config;
 
 #[derive(Accounts)]
-pub struct InitilizeAmm<'info>{
+pub struct Initialize<'info> {
     #[account(mut)]
-    pub payer: Signer<'info>,
+    pub admin: Signer<'info>,
+
+    pub mint_x: Account<'info, Mint>,
+    pub mint_y: Account<'info, Mint>,
+
     #[account(
         init,
-        payer = payer,
-        space = AmmAccount::INIT_SPACE,
-        seeds = [b"amm"],
-        bump
+        payer = admin,
+        seeds = [b"config"],
+        bump,
+        space = Config::INIT_SPACE
     )]
-    pub amm: Account<'info, AmmAccount>,
-    
-    pub mint_a: InterfaceAccount<'info, Mint>,
-    pub mint_b: InterfaceAccount<'info, Mint>,
-    
+    pub config: Account<'info, Config>,
+
     #[account(
         init,
-        payer = payer,
-        mint::decimal = 6,
+        payer = admin,
+        mint::decimals = 6,
         mint::authority = config.key(),
-        seeds = [b"lp", amm.key().as_ref()],
+        seeds = [b"lp", config.key().as_ref()],
         bump,
     )]
     pub mint_lp: Account<'info, Mint>,
-    
+
     #[account(
         init,
-        payer = payer,
-        associated_token::mint = mint_a,
-        associated_token::authority = amm,
-        associated_token::program = token_program
+        payer = admin,
+        associated_token::mint = mint_x,
+        associated_token::authority = config,
+        associated_token::token_program = token_program,
     )]
-    pub token_account_a: Account<'info, TokenAccount>,
+    pub vault_x: Account<'info, TokenAccount>,
+
     #[account(
         init,
-        payer = payer,
-        associated_token::mint= mint_b,
-        associated_token::authority = amm,
-        associated_token::program = token_program
+        payer = admin,
+        associated_token::mint = mint_y,
+        associated_token::authority = config,
+        associated_token::token_program = token_program,
     )]
-    pub token_account_b: Account<'info, TokenAccount>,
+    pub vault_y: Account<'info, TokenAccount>,
+
     pub token_program: Program<'info, Token>,
+    pub associated_token_program: Program<'info, AssociatedToken>,
     pub system_program: Program<'info, System>,
-    pub associated_token_program: Program<'info, AssociatedToken>
 }
 
-
-impl<'info> InitilizeAmm<'info>{
-    pub fn initialize_amm(&mut self, fee: u64, authority: Option<Pubkey>, bump: &InitilizeAmmBumps, seeds: u64) -> Result<()> {
-        self.amm.set_inner(AmmAccount { 
-            seed: seeds, 
-            authority: authority, 
-            token_a: self.mint_a.key(), 
-            token_b: self.mint_b.key(), 
-            fee: fee, 
-            locked: false, 
-            amm_bump: bump.amm, 
-            lp_bump: bump.mint_lp
+impl<'info> Initialize<'info> {
+    pub fn initialize(
+        &mut self,
+        fee: u16,
+        authority: Option<Pubkey>,
+        bumps: &InitializeBumps,
+    ) -> Result<()> {
+        self.config.set_inner(Config {
+            authority,
+            mint_x: self.mint_x.key(),
+            mint_y: self.mint_y.key(),
+            fee,
+            config_bump: bumps.config,
+            lp_bump: bumps.mint_lp,
         });
+
         Ok(())
     }
 }
